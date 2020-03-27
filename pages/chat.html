@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Css and Fontawesome-->
+    <script src="https://kit.fontawesome.com/3388b00aea.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/chat.css">
+
+    <title>Simple Chat - Home</title>
+</head>
+<body>
+    <div class="container">
+
+        <div class="box">
+            
+            <div class="display">
+
+                <h1 class="displaytitte">Chat de Mensagens <i style="color: #3498db;" class="fa fa-commenting" aria-hidden="true"></i></h1>
+
+                <div class="displaymessages" id="messages">
+
+                </div>
+
+            </div>
+
+            <div class="inputText">
+
+                <input type="text" class="entertext" id="entertext">
+                <button type="button" class="enterbtn" id="enterbtn">Enviar</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="userslog" id="userslog">
+
+        <p class="usersevent" id="event"></p>
+
+    </div>
+
+    <div class="copyright">
+        Coded with <i class="fas fa-heart" style="color: #e74c3c;"></i> by FaBiUsKcomp
+    </div>
+
+    <script src="../static/js/axios.js"></script>
+    <script src="../static/js/socket.io.js"></script>
+
+    <script>
+
+        var socket = io()
+
+        const $display = document.getElementById('messages')
+        const $input = document.getElementById('entertext')
+        const $btn = document.getElementById('enterbtn')
+
+        $btn.addEventListener('click', (e) => {
+
+            e.preventDefault()
+            if($input.value == 0) {
+                alert('Digite uma mensagem!')
+                return
+            }
+
+            const message = $input.value
+            socket.emit('chat message', message)
+            $input.value = ''
+            return false
+        })
+
+        socket.on('chat message', (msg) => {
+            const message = document.createElement('p')
+            message.textContent = msg
+            $display.appendChild(message)
+        })
+
+        socket.on('user connected', (msg) => catchEventUser(msg))
+        socket.on('user disconnect', (msg) => catchEventUser(msg))
+
+        function catchEventUser(msg) {
+
+            const $userlog = document.getElementById('userslog')
+            const $event = document.getElementById('event')
+            $event.innerHTML = `<i style="color: #3498db;" class="fa fa-info-circle" aria-hidden="true"></i> ${msg}`
+            $userlog.style.display = 'block'
+
+            window.setTimeout(() => {
+                $event.textContent = ''
+                $userlog.style.display = 'none'
+            }, 5000)
+        }
+
+    </script>
+    
+</body>
+</html>
