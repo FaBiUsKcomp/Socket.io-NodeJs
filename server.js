@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('user connected', `${socket.id} está conectado!`)
     socket.on('disconnect', () => io.emit('user disconnect', `${socket.id} se desconectou!`))
     socket.on('chat message', (msg) => {
-        io.emit('chat message', msg)
+        socket.broadcast.emit('chat message', msg)
     })
 })
 
