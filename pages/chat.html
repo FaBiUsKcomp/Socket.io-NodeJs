@@ -48,52 +48,7 @@
 
     <script src="../static/js/axios.js"></script>
     <script src="../static/js/socket.io.js"></script>
+    <script src="../static/js/function.js"></script>
 
-    <script>
-
-        var socket = io()
-
-        const $display = document.getElementById('messages')
-        const $input = document.getElementById('entertext')
-        const $btn = document.getElementById('enterbtn')
-
-        $btn.addEventListener('click', (e) => {
-
-            e.preventDefault()
-            if($input.value == 0) {
-                alert('Digite uma mensagem!')
-                return
-            }
-
-            const message = $input.value
-            socket.emit('chat message', message)
-            $input.value = ''
-            return false
-        })
-
-        socket.on('chat message', (msg) => {
-            const message = document.createElement('p')
-            message.textContent = msg
-            $display.appendChild(message)
-        })
-
-        socket.on('user connected', (msg) => catchEventUser(msg))
-        socket.on('user disconnect', (msg) => catchEventUser(msg))
-
-        function catchEventUser(msg) {
-
-            const $userlog = document.getElementById('userslog')
-            const $event = document.getElementById('event')
-            $event.innerHTML = `<i style="color: #3498db;" class="fa fa-info-circle" aria-hidden="true"></i> ${msg}`
-            $userlog.style.display = 'block'
-
-            window.setTimeout(() => {
-                $event.textContent = ''
-                $userlog.style.display = 'none'
-            }, 5000)
-        }
-
-    </script>
-    
 </body>
 </html>
